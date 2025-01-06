@@ -4,10 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.cristianvellio.config.Config;
-import com.cristianvellio.model.DatosSerie;
-import com.cristianvellio.screenmatch.service.ConsumoApi;
-import com.cristianvellio.screenmatch.service.ConvierteDatos;
+import com.cristianvellio.principal.Principal;
 
 @SpringBootApplication
 public class ScreenmatchApplication implements CommandLineRunner {
@@ -18,15 +15,9 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		String apikey = Config.getApiKey();
+		Principal principal = new Principal();
+		principal.muestraElMenu();
 
-		var consumoApi = new ConsumoApi();
-		var json = consumoApi.obtenerDatos("http://www.omdbapi.com/?t=game+of+thrones&apikey=" + apikey + "");
-		System.out.println(json);
-
-		ConvierteDatos conversor = new ConvierteDatos();
-		var datos = conversor.obtenerDatos(json, DatosSerie.class);
-		System.out.println(datos);
 	}
 
 }
