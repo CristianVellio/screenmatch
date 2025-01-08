@@ -8,4 +8,8 @@ public class Config {
     public static String getApiKey() {
         return dotenv.get("API_KEY");
     }
+
+    public static String getApiKeyOpenAi() {
+        return dotenv.get("API_GPT");
+    }
 }

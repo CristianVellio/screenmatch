@@ -5,9 +5,6 @@ import java.time.format.DateTimeParseException;
 
 public class Episodio {
 
-    public Episodio(String titulo1, Integer numeroEpisodio1, String calificacion1, String fechaDeEstreno) {
-    }
-
     private Integer temporada;
     private String titulo;
     private Integer numeroEpisodio;
