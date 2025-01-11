@@ -3,12 +3,14 @@ package com.cristianvellio.principal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import com.cristianvellio.config.Config;
 import com.cristianvellio.model.DatosSerie;
 import com.cristianvellio.model.DatosTemporada;
+import com.cristianvellio.model.Episodio;
 import com.cristianvellio.model.Serie;
 import com.cristianvellio.repository.SerieRepository;
 import com.cristianvellio.screenmatch.service.ConsumoApi;
@@ -22,6 +24,7 @@ public class Principal {
         private ConvierteDatos conversor = new ConvierteDatos();
         private List<DatosSerie> datosSeries = new ArrayList<>();
         private SerieRepository repositorio;
+        private List<Serie> series;
 
         public Principal(SerieRepository repository) {
                 this.repositorio = repository;
@@ -71,17 +74,35 @@ public class Principal {
         }
 
         private void buscarEpisodioPorSerie() {
-                DatosSerie datosSerie = getDatosSerie();
-                List<DatosTemporada> temporadas = new ArrayList<>();
+                mostrarSeriesBuscadas();
+                System.out.println("Indica el nombre de la serie que deseas buscar episodios:");
+                var nombreSerie = teclado.nextLine();
 
-                for (int i = 1; i <= datosSerie.totalDeTemporadas(); i++) {
-                        var json = consumoApi.obtenerDatos(
-                                        URL_BASE + datosSerie.titulo().replace(" ", "+") + "&Season=" + i + "&"
-                                                        + API_KEY);
-                        DatosTemporada datosTemporada = conversor.obtenerDatos(json, DatosTemporada.class);
-                        temporadas.add(datosTemporada);
+                Optional<Serie> serie = series.stream()
+                                .filter(s -> s.getTitulo().equalsIgnoreCase(nombreSerie)).findFirst();
+
+                if (serie.isPresent()) {
+                        var serieEncontrada = serie.get();
+                        List<DatosTemporada> temporadas = new ArrayList<>();
+
+                        for (int i = 1; i <= serieEncontrada.getTotalDeTemporadas(); i++) {
+                                var json = consumoApi.obtenerDatos(
+                                                URL_BASE + serieEncontrada.getTitulo().replace(" ", "+") + "&Season="
+                                                                + i + "&"
+                                                                + API_KEY);
+                                DatosTemporada datosTemporada = conversor.obtenerDatos(json, DatosTemporada.class);
+                                temporadas.add(datosTemporada);
+                        }
+                        temporadas.forEach(System.out::println);
+
+                        List<Episodio> episodios = temporadas.stream()
+                                        .flatMap(d -> d.episodios().stream()
+                                                        .map(e -> new Episodio(e.numeroEpisodio(), e)))
+                                        .collect(Collectors.toList());
+                        serieEncontrada.setEpisodios(episodios);
+                        repositorio.save(serieEncontrada);
                 }
-                temporadas.forEach(System.out::println);
+
         }
 
         private void buscarSerieWeb() {
@@ -93,7 +114,7 @@ public class Principal {
         }
 
         private void mostrarSeriesBuscadas() {
-                List<Serie> series = repositorio.findAll();
+                series = repositorio.findAll();
 
                 series.stream()
                                 .sorted(Comparator.comparing(Serie::getGenero))

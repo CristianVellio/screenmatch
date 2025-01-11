@@ -3,13 +3,27 @@ package com.cristianvellio.model;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "episodios")
 public class Episodio {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
 
     private Integer temporada;
     private String titulo;
     private Integer numeroEpisodio;
     private Double calificacion;
     private LocalDate fechaEstreno;
+
+    @ManyToOne
+    private Serie serie;
+
+    public Episodio() {
+    }
 
     public Episodio(Integer numeroDeTemporada, DatosEpisodio d) {
         this.temporada = numeroDeTemporada;
@@ -26,6 +40,14 @@ public class Episodio {
         } catch (DateTimeParseException e) {
             this.fechaEstreno = null;
         }
+    }
+
+    public Serie getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Serie serie) {
+        this.serie = serie;
     }
 
     public Integer getTemporada() {
