@@ -38,6 +38,7 @@ build/
 
 ### Java ###
 application.properties
+src/main/resources/application.properties
 /resources*
 
 ### Maven ###
