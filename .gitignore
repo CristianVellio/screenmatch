@@ -37,7 +37,7 @@ build/
 .env.local
 
 ### Java ###
-application.properties
+### Java ###
 src/main/resources/application.properties
 /resources*
 
