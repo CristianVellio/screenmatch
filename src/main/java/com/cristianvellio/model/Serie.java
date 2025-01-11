@@ -1,17 +1,44 @@
 package com.cristianvellio.model;
 
+import java.util.List;
 import java.util.OptionalDouble;
 
-import com.cristianvellio.screenmatch.service.ConsultaChatGPT;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
+@Entity
+@Table(name = "series")
 public class Serie {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+
+    @Column(unique = true)
     private String titulo;
+
     private Integer totalDeTemporadas;
     private Double calificacion;
     private String poster;
+
+    @Enumerated(EnumType.STRING)
     private Categoria genero;
+
     private String actores;
     private String sinopsis;
+
+    @Transient
+    private List<Episodio> episodios;
+
+    public Serie() {
+    }
 
     public Serie(DatosSerie datosSerie) {
         this.titulo = datosSerie.titulo();
@@ -32,6 +59,14 @@ public class Serie {
                 ", poster='" + poster + '\'' +
                 ", actores='" + actores + '\'' +
                 ", sinopsis='" + sinopsis + '\'';
+    }
+
+    public Long getId() {
+        return Id;
+    }
+
+    public void setId(Long id) {
+        Id = id;
     }
 
     public String getTitulo() {

@@ -10,6 +10,7 @@ import com.cristianvellio.config.Config;
 import com.cristianvellio.model.DatosSerie;
 import com.cristianvellio.model.DatosTemporada;
 import com.cristianvellio.model.Serie;
+import com.cristianvellio.repository.SerieRepository;
 import com.cristianvellio.screenmatch.service.ConsumoApi;
 import com.cristianvellio.screenmatch.service.ConvierteDatos;
 
@@ -20,6 +21,11 @@ public class Principal {
         private final String URL_BASE = "http://www.omdbapi.com/?t=";
         private ConvierteDatos conversor = new ConvierteDatos();
         private List<DatosSerie> datosSeries = new ArrayList<>();
+        private SerieRepository repositorio;
+
+        public Principal(SerieRepository repository) {
+                this.repositorio = repository;
+        }
 
         public void muestraElMenu() {
                 var opcion = -1;
@@ -80,15 +86,14 @@ public class Principal {
 
         private void buscarSerieWeb() {
                 DatosSerie datos = getDatosSerie();
-                datosSeries.add(datos);
+                Serie serie = new Serie(datos);
+                repositorio.save(serie);
+                // datosSeries.add(datos);
                 System.out.println(datos);
         }
 
         private void mostrarSeriesBuscadas() {
-                List<Serie> series = new ArrayList<>();
-                series = datosSeries.stream()
-                                .map(d -> new Serie(d))
-                                .collect(Collectors.toList());
+                List<Serie> series = repositorio.findAll();
 
                 series.stream()
                                 .sorted(Comparator.comparing(Serie::getGenero))
