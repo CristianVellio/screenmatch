@@ -42,6 +42,14 @@
 		</dependency>
 
 		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-devtools</artifactId>
+    		<version>3.4.1</version>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
     		<groupId>io.github.cdimascio</groupId>
     		<artifactId>java-dotenv</artifactId>
     		<version>5.2.2</version>

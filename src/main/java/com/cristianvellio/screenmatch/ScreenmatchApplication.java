@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.cristianvellio.controller", "com.cristianvellio.model",
-		"com.cristianvellio.repository" })
+		"com.cristianvellio.repository", "com.cristianvellio.*", "com.cristianvellio" })
 @EntityScan("com.cristianvellio.model")
 @EnableJpaRepositories("com.cristianvellio.repository")
 public class ScreenmatchApplication {

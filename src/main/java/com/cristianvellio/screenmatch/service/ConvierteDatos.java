@@ -1,8 +1,6 @@
 package com.cristianvellio.screenmatch.service;
 
-import com.cristianvellio.model.DatosSerie;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConvierteDatos implements IConvierteDatos {

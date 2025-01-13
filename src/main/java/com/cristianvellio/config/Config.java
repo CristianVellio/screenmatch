@@ -1,7 +1,10 @@
 package com.cristianvellio.config;
 
+import org.springframework.context.annotation.Configuration;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
+@Configuration
 public class Config {
     private static final Dotenv dotenv = Dotenv.load();
 
